@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './App.css';
 import shuffle from './utilities/shuffle';
 import Card from './components/Card';
+import Header from './components/Header';
 
 function App() {
   const [wins, setWins] = useState(0); // Win streak
@@ -10,8 +11,8 @@ function App() {
   const [pickTwo, setPickTwo] = useState(null); // Second selection
   const [disabled, setDisabled] = useState(false); // Delay handler
 
-   // Handle card selection
-   const handleClick = (card) => {
+  // Handle card selection
+  const handleClick = (card) => {
     if (!disabled) {
       pickOne ? setPickTwo(card) : setPickOne(card);
     }
@@ -21,6 +22,14 @@ function App() {
     setPickOne(null);
     setPickTwo(null);
     setDisabled(false);
+  };
+
+  // Start over
+  const handleNewGame = () => {
+    clearBad
+    setWins(0);
+    handleTurn();
+    setCards(shuffle);
   };
 
   // Used for selection and match handling
@@ -76,13 +85,15 @@ function App() {
 
   return (
     <>
+      <Header handleNewGame={handleNewGame} wins={wins} />
+
       <div className="grid">
         {cards.map((card) => {
           const { image, id, matched } = card;
-          
+
           return (
             <Card
-              key={image.id}
+              key={id}
               card={card}
               image={image}
               onClick={() => handleClick(card)}
